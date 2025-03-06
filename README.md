@@ -55,8 +55,18 @@ These insights empower stakeholders with key business metrics, enabling strategi
 
 For more details, refer to docs/requirements.md.
 
-(Repository Structure to be added)
+##    Repository Structure
+---
+```
 
+data warehouse project/
+|--
+|--datasets/                    # Raw datasets used for the project (ERP and CRM data)
+|--
+|--docs/                        # Project documentation and architecture details.
+(Repository Structure to be added)
+```
+---
 ## 🛡️ License
 
 This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and share this project with proper attribution.
