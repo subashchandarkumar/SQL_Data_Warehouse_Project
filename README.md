@@ -55,6 +55,8 @@ These insights empower stakeholders with key business metrics, enabling strategi
 
 For more details, refer to docs/requirements.md.
 
+(Repository Structure to be added)
+
 ## 🛡️ License
 
 This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and share this project with proper attribution.
@@ -64,4 +66,5 @@ This project is licensed under the [MIT License](LICENSE). You are free to use, 
 Hi!!! I'm Subash Chandar Kumar in the transition phase of changing careers. Looking forward to showcase this portfolio project as one of my experiences.
 
 See me on:
+
 [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](www.linkedin.com/in/kumar-subash-chandar)
