@@ -67,4 +67,4 @@ Hi!!! I'm Subash Chandar Kumar in the transition phase of changing careers. Look
 
 See me on:
 
-[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](www.linkedin.com/in/kumar-subash-chandar)
+[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/kumar-subash-chandar)
