@@ -1,0 +1,103 @@
+/* First Table in Inspection
+ bronze.crm_cust_info  */
+
+--Check for Nulls or Duplicates in Primary Key
+--Expectation: No Result
+
+ SELECT 
+	cst_id,
+	COUNT(*)
+ FROM bronze.crm_cust_info
+ GROUP BY cst_id
+ HAVING COUNT(*) > 1 OR cst_id IS NULL; -- we add cst_id IS NULL because we want even when there is only one NULL.
+
+ --Expanding on previous select statement
+ SELECT *
+FROM bronze.crm_cust_info
+WHERE cst_id = 29483; -- We can use any cst_id value from previous code to verify the values. (and use the latest value from the list)
+
+SELECT
+	*,
+	ROW_NUMBER() OVER( PARTITION BY cst_id ORDER BY cst_create_date DESC) AS flag_last 
+FROM bronze.crm_cust_info
+WHERE cst_id = 29466;  -- ranked by recent data first
+
+SELECT
+	*,
+	ROW_NUMBER() OVER( PARTITION BY cst_id ORDER BY cst_create_date DESC) AS flag_last 
+FROM bronze.crm_cust_info;
+
+SELECT *
+FROM (
+	SELECT
+		*,
+		ROW_NUMBER() OVER( PARTITION BY cst_id ORDER BY cst_create_date DESC) AS flag_last 
+	FROM bronze.crm_cust_info
+)t WHERE flag_last = 1;
+
+-- Check for unwanted Spaces
+-- Expectation: No Results
+
+SELECT cst_firstname
+FROM bronze.crm_cust_info
+WHERE cst_firstname != TRIM(cst_firstname); -- also check for cst_lastname & cst_gndr, cst_key
+
+--Data Standardisation & Consistency
+SELECT DISTINCT cst_marital_status
+FROM bronze.crm_cust_info;    -- ALSO check for cst_gndr
+
+-- Insert data into the table in the silver layer.
+
+INSERT INTO silver.crm_cust_info(
+	cst_id,
+	cst_key,
+	cst_firstname,
+	cst_lastname,
+	cst_marital_status,
+	cst_gndr,
+	cst_create_date
+)
+SELECT 
+	   cst_id,
+	   cst_key,
+       TRIM(cst_firstname) AS cst_firstname,
+       TRIM(cst_lastname) AS cst_lastname,
+	   CASE UPPER(TRIM(cst_marital_status))
+			WHEN 'S' THEN 'Single'
+			WHEN 'M' THEN 'Married'
+			ELSE 'n/a'
+	   END cst_marital_status,
+	   CASE UPPER(TRIM(cst_gndr))
+			WHEN 'F' THEN 'Female'
+			WHEN 'M' THEN 'Male'
+			ELSE 'n/a'
+	   END cst_gndr,
+       cst_create_date
+FROM (
+	SELECT
+		*,
+		ROW_NUMBER() OVER( PARTITION BY cst_id ORDER BY cst_create_date DESC) AS flag_last 
+	FROM bronze.crm_cust_info
+	WHERE cst_id IS NOT NULL
+)t WHERE flag_last = 1 ;
+
+--After this step do quality checks like following.
+
+--First check
+SELECT 
+	cst_id,
+	COUNT(*)
+ FROM silver.crm_cust_info
+ GROUP BY cst_id
+ HAVING COUNT(*) > 1 OR cst_id IS NULL; 
+
+ --Second check
+SELECT cst_firstname
+FROM silver.crm_cust_info
+WHERE cst_firstname != TRIM(cst_firstname);-- also check for cst_lastname & cst_gndr, cst_key
+
+--Third check
+SELECT DISTINCT cst_marital_status
+FROM silver.crm_cust_info;    -- ALSO check for cst_gndr
+
+SELECT * FROM silver.crm_cust_info;
